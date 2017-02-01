@@ -6,18 +6,22 @@ class Users(db.Model):
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(), unique=True, nullable=False)
     create_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     last_update_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     user_name = db.Column(db.String())
-    first_name = db.Column(db.String())
-    last_name = db.Column(db.String())
+    avatar = db.Column(db.String(200))
+    active = db.Column(db.Boolean, default=False)
+    tokens = db.Column(db.Text)
     phone_number = db.Column(db.String())
     can_text = db.Column(db.Boolean)
     
-    def __init__(self, user_name, first_name, last_name, phone_number, can_text):
+    def __init__(self, email, user_name, avatar, active, tokens, phone_number, can_text):
+        self.email = email
         self.user_name = user_name
-        self.first_name = first_name
-        self.last_name = last_name
+        self.avatar = avatar
+        self.active = active
+        self.tokens = tokens
         self.phone_number = phone_number
         self.can_text = can_text
         
@@ -25,6 +29,8 @@ class Users(db.Model):
         return '<id {}>'.format(self.id)
     
 class Clubs(db.Model):
+    __tablename__ = 'clubs'
+    
     id = db.Column(db.Integer, primary_key=True)
     create_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     last_update_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
@@ -41,6 +47,8 @@ class Clubs(db.Model):
         return '<id {}>'.format(self.id)
 
 class Club_Members(db.Model):
+    __tablename__ = 'club_members'
+    
     id = db.Column(db.Integer, primary_key=True)
     create_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     last_update_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
@@ -117,9 +125,9 @@ class Courses(db.Model):
     postal_code = db.Column(db.String())
     lat = db.Column(db.Float)
     lng = db.Column(db.Float)
-    info = db.Column(JSON)
+    #info = db.Column(JSON)
     
-    def __init__(self, name, phone, address1, address2, city, province, state, country, postal_code, lat, lng, info):
+    def __init__(self, name, phone, address1, address2, city, province, state, country, postal_code, lat, lng):
         self.name = name
         self.phone = phone
         self.address1 = address1
@@ -131,7 +139,7 @@ class Courses(db.Model):
         self.postal_code = postal_code
         self.lat = lat
         self.lng = lng
-        self.info = info
+        #self.info = info
         
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -143,7 +151,7 @@ class Tees(db.Model):
     create_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     last_update_date = db.Column(db.DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     course_id = db.Column(db.Integer, nullable=False)
-    name = db.Column(String())
+    name = db.Column(db.String())
     par = db.Column(db.Integer)
     index = db.Column(db.Float)
     slope = db.Column(db.Float)
